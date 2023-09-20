@@ -74,7 +74,6 @@ macro(CMakeAndroidD8)
             ${${m}_FILE_PER_CLASS}
             ${${m}_THREAD_COUNT}
             --output "${${m}_DESTINATION}"
-        COMMAND_ECHO STDOUT
         RESULT_VARIABLE CMakeAndroidD8.last_result
         OUTPUT_VARIABLE CMakeAndroidD8.last_output
         ERROR_VARIABLE CMakeAndroidD8.last_error
