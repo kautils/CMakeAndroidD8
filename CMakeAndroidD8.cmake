@@ -2,7 +2,7 @@ macro(CMakeAndroidD8)
     set(${PROJECT_NAME}_m_evacu ${m})
     set(m ${PROJECT_NAME}.CMakeAndroidD8)
     list(APPEND ${m}_unsetter  ${m}_REQUIRED ${m}_build_type ${m}_DEBUG ${m}_FILES ${m}_D8 ${m}_RELEASE ${m}_CLASSPASS ${m}_DESTINATION ${m}_WORKING_DIRECTORY ${m}_DEBUG_VERBOSE)
-    cmake_parse_arguments(${m} "REQUIRED;RELEASE;DEBUG;DEBUG_VERBOSE" "D8;DESTINATION;WORKING_DIRECTORY;" "CLASSPASS;FILES" ${ARGV})
+    cmake_parse_arguments(${m} "FILE_PER_CLASS;INTERMEDIATE;REQUIRED;RELEASE;DEBUG;DEBUG_VERBOSE;MAIN_DEX_LIST" "D8;DESTINATION;WORKING_DIRECTORY;" "CLASSPASS;FILES" ${ARGV})
     
     if(${${m}_DEBUG_VERBOSE})
         include(CMakePrintHelpers)
@@ -24,6 +24,19 @@ macro(CMakeAndroidD8)
         set(${m}_build_type --release)
     endif()
     
+    if(${${m}_INTERMEDIATE})
+        set(${m}_INTERMEDIATE --intermediate)
+    endif()
+    
+    if(${${m}_FILE_PER_CLASS})
+        set(${m}_FILE_PER_CLASS --file-per-class)
+    endif()
+    
+    if(DEFINED ${m}_MAIN_DEX_LIST)
+        set(${m}_MAIN_DEX_LIST --main-dex-list ${${m}_MAIN_DEX_LIST})
+    endif()
+    
+    
     
     list(JOIN ${m}_CLASSPASS ";--classpath;" ${m}_CLASSPASS)
     set(${m}_CLASSPASS --classpath ${${m}_CLASSPASS})
@@ -32,9 +45,12 @@ macro(CMakeAndroidD8)
         COMMAND 
             "${${m}_D8}" 
             ${${m}_build_type}
+            ${${m}_MAIN_DEX_LIST}
             ${${m}_CLASSPASS}
-            --output "${${m}_DESTINATION}"
             ${${m}_FILES}
+            ${${m}_INTERMEDIATE}
+            ${${m}_FILE_PER_CLASS}
+            --output "${${m}_DESTINATION}"
         RESULT_VARIABLE CMakeAndroidD8.last_result
         OUTPUT_VARIABLE CMakeAndroidD8.last_output
         ERROR_VARIABLE CMakeAndroidD8.last_error
