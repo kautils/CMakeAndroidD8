@@ -1,21 +1,14 @@
 macro(CMakeAndroidD8)
     set(${PROJECT_NAME}_m_evacu ${m})
     set(m ${PROJECT_NAME}.CMakeAndroidD8)
-    list(APPEND ${m}_unsetter ${m}_THREAD_COUNT ${m}_DEBUG_VERBOSE ${m}_REQUIRED ${m}_build_type ${m}_INTERMEDIATE ${m}_FILE_PER_CLASS ${m}_MAIN_DEX_LIST ${m}_DEBUG ${m}_FILES ${m}_D8 ${m}_RELEASE ${m}_CLASSPASS ${m}_DESTINATION ${m}_WORKING_DIRECTORY ${m}_DEBUG_VERBOSE)
+    list(APPEND ${m}_unsetter ${m}_LIB ${m}_THREAD_COUNT ${m}_DEBUG_VERBOSE ${m}_REQUIRED ${m}_build_type ${m}_INTERMEDIATE ${m}_FILE_PER_CLASS ${m}_MAIN_DEX_LIST ${m}_DEBUG ${m}_FILES ${m}_D8 ${m}_RELEASE ${m}_CLASSPASS ${m}_DESTINATION ${m}_WORKING_DIRECTORY ${m}_DEBUG_VERBOSE)
     cmake_parse_arguments(${m} "FILE_PER_CLASS;INTERMEDIATE;REQUIRED;RELEASE;DEBUG;DEBUG_VERBOSE;" "LIB;D8;DESTINATION;WORKING_DIRECTORY;MAIN_DEX_LIST;THREAD_COUNT" "CLASSPASS;FILES" ${ARGV})
-    
-    if(${${m}_DEBUG_VERBOSE})
-        include(CMakePrintHelpers)
-        foreach(__var ${${m}_unsetter})
-            cmake_print_variables(${__var})
-        endforeach()
-    endif()
     
     if(NOT DEFINED ${${m}_WORKING_DIRECTORY})
         set(${m}_WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR})
     endif()
     
-    if(NOT DEFINED ${${m}_DESTINATION})
+    if(NOT DEFINED ${m}_DESTINATION)
         set(${m}_DESTINATION ${CMAKE_CURRENT_LIST_DIR})
     endif()
     
