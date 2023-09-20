@@ -16,7 +16,7 @@ include(CMakeAndroidD8.cmake)
 
 # d8 --release --classpath "${sdk.android_jar}" --classpath "./libs/*" --output . ${__class_jars} ${__libs_jars} 
 CMakeAndroidD8(
-    D8 "${sdk.d8}"
+    D8 "path_to_d8"
     RELEASE
     CLASSPASS "${sdk.android_jar}" "./libs/*"
     DESTINATION .
