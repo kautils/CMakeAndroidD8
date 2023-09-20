@@ -1,8 +1,8 @@
 macro(CMakeAndroidD8)
     set(${PROJECT_NAME}_m_evacu ${m})
     set(m ${PROJECT_NAME}.CMakeAndroidD8)
-    list(APPEND ${m}_unsetter ${m}_DEBUG_VERBOSE ${m}_REQUIRED ${m}_build_type ${m}_INTERMEDIATE ${m}_FILE_PER_CLASS ${m}_MAIN_DEX_LIST ${m}_DEBUG ${m}_FILES ${m}_D8 ${m}_RELEASE ${m}_CLASSPASS ${m}_DESTINATION ${m}_WORKING_DIRECTORY ${m}_DEBUG_VERBOSE)
-    cmake_parse_arguments(${m} "DEBUG_VERBOSE;FILE_PER_CLASS;INTERMEDIATE;REQUIRED;RELEASE;DEBUG;DEBUG_VERBOSE;" "D8;DESTINATION;WORKING_DIRECTORY;MAIN_DEX_LIST" "CLASSPASS;FILES" ${ARGV})
+    list(APPEND ${m}_unsetter ${m}_THREAD_COUNT ${m}_DEBUG_VERBOSE ${m}_REQUIRED ${m}_build_type ${m}_INTERMEDIATE ${m}_FILE_PER_CLASS ${m}_MAIN_DEX_LIST ${m}_DEBUG ${m}_FILES ${m}_D8 ${m}_RELEASE ${m}_CLASSPASS ${m}_DESTINATION ${m}_WORKING_DIRECTORY ${m}_DEBUG_VERBOSE)
+    cmake_parse_arguments(${m} "FILE_PER_CLASS;INTERMEDIATE;REQUIRED;RELEASE;DEBUG;DEBUG_VERBOSE;" "LIB;D8;DESTINATION;WORKING_DIRECTORY;MAIN_DEX_LIST;THREAD_COUNT" "CLASSPASS;FILES" ${ARGV})
     
     if(${${m}_DEBUG_VERBOSE})
         include(CMakePrintHelpers)
@@ -42,6 +42,14 @@ macro(CMakeAndroidD8)
         set(${m}_MAIN_DEX_LIST )
     endif()
     
+    if(DEFINED ${m}_THREAD_COUNT)
+        set(${m}_THREAD_COUNT --thread-count ${${m}_THREAD_COUNT})
+    endif()
+        
+    if(DEFINED ${m}_LIB)
+        set(${m}_LIB --lib ${${m}_LIB})
+    endif()
+        
     if(${${m}_DEBUG_VERBOSE})
         foreach(__var ${${m}_unsetter})
             include(CMakePrintHelpers)
@@ -60,10 +68,13 @@ macro(CMakeAndroidD8)
             ${${m}_build_type}
             ${${m}_MAIN_DEX_LIST}
             ${${m}_CLASSPASS}
-            --output "${${m}_DESTINATION}"
+            ${${m}_LIB}
             ${${m}_FILES}
             ${${m}_INTERMEDIATE}
             ${${m}_FILE_PER_CLASS}
+            ${${m}_THREAD_COUNT}
+            --output "${${m}_DESTINATION}"
+        COMMAND_ECHO STDOUT
         RESULT_VARIABLE CMakeAndroidD8.last_result
         OUTPUT_VARIABLE CMakeAndroidD8.last_output
         ERROR_VARIABLE CMakeAndroidD8.last_error
